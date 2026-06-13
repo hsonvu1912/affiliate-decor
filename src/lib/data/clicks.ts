@@ -2,8 +2,10 @@ import { appendRow } from "@/lib/google/sheets";
 import { env } from "@/lib/env";
 import type { ClickEvent } from "@/types";
 
-// Column order must match the Clicks tab header.
-const COLUMNS: (keyof ClickEvent)[] = [
+// Column order must match the Clicks tab header (see TAB_HEADERS.Clicks in
+// src/lib/sheet-schema.ts — a vitest assertion keeps the two in sync). Exported
+// so the seed/verify scripts reuse the exact same order.
+export const COLUMNS: (keyof ClickEvent)[] = [
   "timestamp",
   "productId",
   "productName",
