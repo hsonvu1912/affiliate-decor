@@ -4,6 +4,8 @@ import { getPublishedProducts } from "@/lib/data/products";
 import { getPublishedCollections } from "@/lib/data/collections";
 import { getPublishedCategories } from "@/lib/data/categories";
 
+export const dynamic = "force-static";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
   const [products, collections, categories] = await Promise.all([

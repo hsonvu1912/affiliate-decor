@@ -1,8 +1,12 @@
 import { clsx } from "@/lib/cn";
 import type { Product } from "@/types";
 
-// Outbound CTA. Always routes through /go/[id] so every click is tracked and
-// the raw affiliate URL is not the crawlable href. rel marks it sponsored.
+// In a static export (GitHub Pages demo) there is no server, so link straight
+// to the affiliate URL. On a server deploy, route through /go/[id] so every
+// click is tracked and the raw affiliate URL is not the crawlable href.
+const STATIC = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
+
+// Outbound CTA. rel marks it sponsored.
 export function BuyButton({
   product,
   className,
@@ -12,9 +16,10 @@ export function BuyButton({
   className?: string;
   size?: "lg" | "sm";
 }) {
+  const href = STATIC ? product.affiliateUrl : `/go/${encodeURIComponent(product.id)}`;
   return (
     <a
-      href={`/go/${encodeURIComponent(product.id)}`}
+      href={href}
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"
       className={clsx(

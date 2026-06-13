@@ -1,0 +1,82 @@
+name: Deploy demo to GitHub Pages
+
+# Builds a STATIC EXPORT of the site with mock fixture data and publishes it to
+# GitHub Pages so the editorial UI can be previewed without any backend.
+#
+# Server-only features are intentionally absent in this demo:
+#   - /go click tracking, /img Drive proxy, /api/revalidate webhook (route
+#     handlers are removed before the static build)
+#   - "Mua ngay" links go straight to the affiliate URL (NEXT_PUBLIC_STATIC_EXPORT)
+# The full-featured version runs on a server (e.g. Vercel) with live Google data.
+
+on:
+  push:
+    branches:
+      - claude/decor-affiliate-platform-vn-6a6l5m
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Prepare static export
+        run: |
+          # Route handlers can't be statically exported — remove them for the demo.
+          rm -rf "src/app/api" "src/app/go" "src/app/img"
+          # dynamicParams must be a literal false under output: export.
+          find src/app -name 'page.tsx' -exec \
+            sed -i 's/export const dynamicParams = true;/export const dynamicParams = false;/' {} +
+
+      - name: Build static export
+        env:
+          STATIC_EXPORT: "true"
+          NEXT_PUBLIC_STATIC_EXPORT: "true"
+          USE_MOCK_DATA: "true"
+          # basePath = the path GitHub Pages serves a project site under.
+          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.origin }}${{ steps.pages.outputs.base_path }}
+        run: npx next build
+
+      - name: Disable Jekyll processing
+        run: touch out/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

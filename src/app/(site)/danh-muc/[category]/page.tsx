@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { Breadcrumb } from "@/components/ui/Breadcrumb";
 import { ProductGrid } from "@/components/product/ProductGrid";
 
+// Allow on-demand new entries on a server deploy; static export needs false.
 export const dynamicParams = true;
 
 export async function generateStaticParams() {
