@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
+  <rect width="800" height="1000" fill="#efe7da"/>
+  <rect x="1" y="1" width="798" height="998" fill="none" stroke="#e0d6c6" stroke-width="2"/>
+  <g fill="none" stroke="#b4533a" stroke-width="2" opacity="0.5">
+    <circle cx="400" cy="460" r="70"/>
+    <path d="M340 560 L400 470 L460 560"/>
+  </g>
+  <text x="400" y="640" font-family="Georgia, serif" font-size="30" fill="#8a8174" text-anchor="middle">Tổ Ấm</text>
+</svg>

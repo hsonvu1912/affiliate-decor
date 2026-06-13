@@ -1,0 +1,35 @@
+[
+  {
+    "id": "goc-doc-sach",
+    "title": "Góc đọc sách mùa thu",
+    "subtitle": "Ánh đèn ấm, một chiếc ghế mây và mùi hương gỗ trầm — công thức cho buổi chiều chậm rãi bên trang sách.",
+    "heroImageId": "https://picsum.photos/seed/docsach/1600/1000",
+    "editorialBody": "Mùa thu là lời mời gọi sống chậm lại. Khi nắng dịu đi và gió mang theo chút se lạnh, góc đọc sách trở thành nơi trú ẩn yêu thích trong nhà.\n\nChúng tôi tuyển chọn những món đồ giúp bạn dựng nên không gian ấy: một nguồn sáng vàng ấm vừa đủ để không mỏi mắt, chất liệu mây tre mộc mạc, và một ngọn nến thơm gỗ trầm để đánh thức mọi giác quan.",
+    "productIds": ["den-may-001", "ghe-may-001", "nen-tram-001", "tham-jute-001"],
+    "featured": true,
+    "order": 1,
+    "status": "published"
+  },
+  {
+    "id": "ban-an-am-cung",
+    "title": "Bàn ăn ấm cúng",
+    "subtitle": "Bữa cơm gia đình đẹp hơn khi mặt bàn được chăm chút bằng gốm thủ công và một bình hoa nhỏ.",
+    "heroImageId": "https://picsum.photos/seed/banan/1600/1000",
+    "editorialBody": "Không cần một bữa tiệc cầu kỳ để mặt bàn trở nên đáng nhớ. Đôi khi chỉ là một chiếc bình gốm men rạn, vài nhành hoa theo mùa và ánh nến lung linh.\n\nBộ sưu tập này dành cho những ai tin rằng bữa ăn là nghi thức của sự gắn kết.",
+    "productIds": ["binh-gom-001", "binh-datnung-001", "nen-tram-001"],
+    "featured": true,
+    "order": 2,
+    "status": "published"
+  },
+  {
+    "id": "tuong-ke-chuyen",
+    "title": "Bức tường kể chuyện",
+    "subtitle": "Nghệ thuật treo tường theo phong cách gallery — biến mảng tường trống thành tuyên ngôn thẩm mỹ.",
+    "heroImageId": "https://picsum.photos/seed/tuongtranh/1600/1000",
+    "editorialBody": "Một bức tường gallery không cần đắt đỏ — nó cần sự nhất quán và một chút can đảm. Hãy bắt đầu từ một tác phẩm trung tâm rồi mở rộng dần.\n\nNhững khung gỗ và bản in dưới đây được chọn để phối hợp dễ dàng với nhau.",
+    "productIds": ["tranh-botanical-001", "tranh-truutuong-001"],
+    "featured": false,
+    "order": 3,
+    "status": "published"
+  }
+]
