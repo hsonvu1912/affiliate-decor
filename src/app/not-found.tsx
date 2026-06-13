@@ -3,17 +3,20 @@ import { Container } from "@/components/ui/Container";
 
 export default function NotFound() {
   return (
-    <Container width="narrow" className="py-32 text-center">
-      <p className="eyebrow mb-4">Lỗi 404</p>
-      <h1 className="font-display text-5xl font-semibold text-ink">Không tìm thấy trang</h1>
-      <p className="mt-4 text-lg text-charcoal/80">
+    <Container width="narrow" className="py-40 text-center">
+      <p className="eyebrow mb-4 text-mute">Lỗi 404</p>
+      <h1 className="font-display text-3xl font-medium tracking-tight text-ink sm:text-4xl">
+        Không tìm thấy trang
+      </h1>
+      <p className="mt-4 text-sm leading-relaxed text-mute">
         Trang bạn tìm có thể đã được dời đi hoặc không còn tồn tại.
       </p>
       <Link
         href="/"
-        className="mt-8 inline-flex items-center gap-2 rounded-full bg-terracotta px-7 py-3.5 text-base font-medium text-bone hover:bg-terracotta-dark"
+        className="mt-8 inline-flex items-center gap-3 border-b border-ink pb-1 text-xs font-medium uppercase tracking-[0.18em] text-ink transition-opacity hover:opacity-60"
       >
-        ← Về trang chủ
+        <span aria-hidden>←</span>
+        Về trang chủ
       </Link>
     </Container>
   );

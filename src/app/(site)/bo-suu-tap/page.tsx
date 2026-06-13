@@ -14,10 +14,10 @@ export default async function CollectionsIndexPage() {
   return (
     <Container width="wide" className="py-16 sm:py-20">
       <Breadcrumb items={[{ label: "Trang chủ", href: "/" }, { label: "Bộ sưu tập" }]} />
-      <h1 className="mt-5 font-display text-5xl font-semibold text-ink sm:text-6xl">
+      <h1 className="mt-5 font-display text-3xl font-medium tracking-tight text-ink sm:text-4xl">
         Bộ sưu tập
       </h1>
-      <p className="mt-4 max-w-2xl text-lg leading-relaxed text-charcoal/85">
+      <p className="mt-4 max-w-2xl text-sm leading-relaxed text-mute">
         Mỗi bộ sưu tập là một câu chuyện không gian — tập hợp những món đồ chia sẻ chung
         một tinh thần thẩm mỹ.
       </p>

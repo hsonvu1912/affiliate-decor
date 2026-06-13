@@ -29,14 +29,14 @@ export default async function HomePage() {
 
       {/* Featured products as alternating magazine spreads */}
       {featured.length > 0 ? (
-        <Section tone="bone">
+        <Section tone="paper">
           <Container width="wide">
             <SectionHeader
               eyebrow="Được tuyển chọn"
               title="Những món đồ chúng tôi mê mẩn tháng này"
               intro="Mỗi món được chọn vì câu chuyện thiết kế và chất liệu — không phải vì giá rẻ."
             />
-            <div className="space-y-20">
+            <div className="space-y-24">
               {featured.map((p, i) => (
                 <FeatureBlock key={p.id} product={p} reverse={i % 2 === 1} index={i} />
               ))}
@@ -47,7 +47,7 @@ export default async function HomePage() {
 
       {/* Collections rail */}
       {collections.length > 0 ? (
-        <Section tone="cream">
+        <Section tone="bone">
           <Container width="wide">
             <SectionHeader
               eyebrow="Bộ sưu tập"
@@ -60,17 +60,19 @@ export default async function HomePage() {
       ) : null}
 
       {/* Browse by category */}
-      <Section tone="bone">
+      <Section tone="paper">
         <Container width="wide">
           <SectionHeader eyebrow="Khám phá" title="Dạo theo danh mục" />
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+          <div className="grid grid-cols-2 border-l border-t border-line sm:grid-cols-3 lg:grid-cols-5">
             {categories.map((c) => (
               <Link
                 key={c.id}
                 href={`/danh-muc/${c.id}`}
-                className="rounded-sm border border-line bg-cream/50 px-5 py-6 text-center transition-colors hover:border-terracotta hover:bg-cream"
+                className="group flex items-center justify-center border-b border-r border-line px-5 py-10 text-center transition-colors hover:bg-ink"
               >
-                <span className="font-display text-lg text-ink">{c.name}</span>
+                <span className="text-sm uppercase tracking-[0.12em] text-ink transition-colors group-hover:text-paper">
+                  {c.name}
+                </span>
               </Link>
             ))}
           </div>
@@ -78,16 +80,17 @@ export default async function HomePage() {
       </Section>
 
       {/* Latest grid */}
-      <Section tone="bone" className="pt-0">
+      <Section tone="paper" className="pt-0">
         <Container width="wide">
           <SectionHeader eyebrow="Mới cập nhật" title="Tất cả sản phẩm" />
           <ProductGrid products={latest.slice(0, 8)} />
-          <div className="mt-12 text-center">
+          <div className="mt-16 text-center">
             <Link
               href="/tim-kiem"
-              className="inline-flex items-center gap-2 rounded-full border border-ink/20 px-7 py-3.5 text-base font-medium text-ink hover:border-terracotta hover:text-terracotta"
+              className="inline-flex items-center gap-3 border-b border-ink pb-1 text-xs font-medium uppercase tracking-[0.18em] text-ink transition-opacity hover:opacity-60"
             >
-              Xem & lọc tất cả →
+              Xem & lọc tất cả
+              <span aria-hidden>→</span>
             </Link>
           </div>
         </Container>

@@ -40,7 +40,7 @@ export default async function CategoryPage({
 
   return (
     <>
-      <section className="relative overflow-hidden bg-ink text-bone">
+      <section className="relative overflow-hidden bg-ink text-paper">
         {cat.heroImageId ? (
           <>
             <Image
@@ -48,27 +48,29 @@ export default async function CategoryPage({
               alt={cat.name}
               fill
               sizes="100vw"
-              className="object-cover opacity-40"
+              className="object-cover opacity-45"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/50 to-ink/30" />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/55 to-ink/35" />
           </>
         ) : null}
-        <Container width="wide" className="relative py-20 sm:py-28">
-          <Breadcrumb
-            items={[{ label: "Trang chủ", href: "/" }, { label: cat.name }]}
-          />
-          <h1 className="mt-5 font-display text-5xl font-semibold sm:text-6xl">{cat.name}</h1>
+        <Container width="wide" className="relative py-24 sm:py-32">
+          <Breadcrumb items={[{ label: "Trang chủ", href: "/" }, { label: cat.name }]} />
+          <h1 className="mt-6 font-display text-4xl font-medium tracking-tight sm:text-5xl">
+            {cat.name}
+          </h1>
           {cat.description ? (
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-bone/85">
+            <p className="mt-5 max-w-2xl text-base leading-relaxed text-paper/80">
               {cat.description}
             </p>
           ) : null}
         </Container>
       </section>
 
-      <Container width="wide" className="py-16 sm:py-20">
-        <p className="mb-8 text-sm text-stone">{products.length} sản phẩm</p>
+      <Container width="wide" className="py-14 sm:py-20">
+        <p className="mb-8 text-[0.6875rem] uppercase tracking-[0.14em] text-mute">
+          {products.length} sản phẩm
+        </p>
         <ProductGrid products={products} />
       </Container>
     </>
