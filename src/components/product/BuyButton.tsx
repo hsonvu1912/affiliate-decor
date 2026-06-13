@@ -6,7 +6,7 @@ import type { Product } from "@/types";
 // click is tracked and the raw affiliate URL is not the crawlable href.
 const STATIC = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
 
-// Outbound CTA. rel marks it sponsored.
+// Outbound CTA — solid black rectangle, no radius. rel marks it sponsored.
 export function BuyButton({
   product,
   className,
@@ -23,13 +23,13 @@ export function BuyButton({
       target="_blank"
       rel="nofollow sponsored noopener noreferrer"
       className={clsx(
-        "inline-flex items-center justify-center gap-2 rounded-full bg-terracotta font-medium text-bone transition-colors hover:bg-terracotta-dark",
-        size === "lg" ? "px-7 py-3.5 text-base" : "px-5 py-2.5 text-sm",
+        "inline-flex items-center justify-center gap-2 bg-ink font-medium uppercase tracking-[0.15em] text-paper transition-colors hover:bg-ink/85",
+        size === "lg" ? "px-7 py-4 text-xs" : "px-5 py-3 text-[0.6875rem]",
         className,
       )}
     >
-      Mua ngay
-      {product.retailer ? <span className="opacity-80">· {product.retailer}</span> : null}
+      <span>Mua ngay</span>
+      {product.retailer ? <span className="opacity-60">· {product.retailer}</span> : null}
       <span aria-hidden>↗</span>
     </a>
   );
