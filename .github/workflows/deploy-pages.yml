@@ -1,11 +1,15 @@
 name: Deploy demo to GitHub Pages
 
 # Builds a STATIC EXPORT of the site with mock fixture data and publishes it to
-# GitHub Pages so the editorial UI can be previewed without any backend.
+# the `gh-pages` branch. Deploying via a plain git push (not the Pages deploy
+# API) avoids the "Resource not accessible by integration" permission error.
 #
-# Server-only features are intentionally absent in this demo:
-#   - /go click tracking, /img Drive proxy, /api/revalidate webhook (route
-#     handlers are removed before the static build)
+# After the first run, set repo Settings → Pages → Source: "Deploy from a
+# branch" → Branch: gh-pages / (root). (Pages on a PRIVATE repo needs a paid
+# plan — make the repo public to use it for free.)
+#
+# Server-only features are intentionally absent in this static demo:
+#   - /go click tracking, /img Drive proxy, /api/revalidate webhook (removed)
 #   - "Mua ngay" links go straight to the affiliate URL (NEXT_PUBLIC_STATIC_EXPORT)
 # The full-featured version runs on a server (e.g. Vercel) with live Google data.
 
@@ -16,16 +20,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: pages
+  group: deploy-gh-pages
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -37,12 +39,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Configure GitHub Pages
-        id: pages
-        # Pages must already be enabled in repo Settings → Pages → Source:
-        # "GitHub Actions" (the Actions token cannot enable it automatically).
-        uses: actions/configure-pages@v5
 
       - name: Prepare static export
         run: |
@@ -57,26 +53,20 @@ jobs:
           STATIC_EXPORT: "true"
           NEXT_PUBLIC_STATIC_EXPORT: "true"
           USE_MOCK_DATA: "true"
-          # basePath = the path GitHub Pages serves a project site under.
-          PAGES_BASE_PATH: ${{ steps.pages.outputs.base_path }}
-          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.origin }}${{ steps.pages.outputs.base_path }}
+          PAGES_BASE_PATH: "/affiliate-decor"
+          NEXT_PUBLIC_SITE_URL: "https://hsonvu1912.github.io/affiliate-decor"
         run: npx next build
 
-      - name: Disable Jekyll processing
-        run: touch out/.nojekyll
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./out
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish to gh-pages branch
+        run: |
+          cd out
+          touch .nojekyll
+          git init -q
+          git checkout -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Deploy static demo (${GITHUB_SHA::7})"
+          git push -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" gh-pages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
