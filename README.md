@@ -26,8 +26,14 @@ Mặc định `.env.local` đặt `USE_MOCK_DATA=true`, site chạy bằng dữ 
 | `npm test` | Unit test (Vitest) |
 | `npm run typecheck` | Kiểm tra kiểu TypeScript |
 | `npm run lint` | ESLint |
+| `npm run seed` | Bơm dữ liệu mẫu vào Google Sheet thật (xem [docs/GO-LIVE.md](docs/GO-LIVE.md)) |
+| `npm run verify` | Kiểm tra kết nối Google Sheet/Drive trước khi deploy |
 
 ## Kết nối Google Sheets thật
+
+> 📘 Hướng dẫn lên LIVE từng bước (cho người không code) ở **[docs/GO-LIVE.md](docs/GO-LIVE.md)** —
+> gồm `npm run seed` (tự tạo tab + bơm dữ liệu mẫu) và `npm run verify` (kiểm tra kết nối).
+
 
 1. **Google Cloud:** tạo project → bật **Google Sheets API** và **Google Drive API**.
 2. **Service account:** tạo service account, tạo key JSON. Lấy `client_email` và `private_key`.
