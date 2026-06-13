@@ -40,9 +40,9 @@ jobs:
 
       - name: Configure GitHub Pages
         id: pages
+        # Pages must already be enabled in repo Settings → Pages → Source:
+        # "GitHub Actions" (the Actions token cannot enable it automatically).
         uses: actions/configure-pages@v5
-        with:
-          enablement: true
 
       - name: Prepare static export
         run: |
