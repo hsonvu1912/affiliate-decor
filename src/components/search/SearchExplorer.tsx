@@ -4,12 +4,15 @@ import { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import type { Category, ProductFilters, Style } from "@/types";
 import { filterProducts, parseFilters } from "@/lib/search";
-import { ProductCard } from "@/components/product/ProductCard";
+import { ProductGrid } from "@/components/product/ProductGrid";
+import { clsx } from "@/lib/cn";
 import type { Product } from "@/types";
 
 // Client-side search + filter. Reads the current filters from the URL so the
 // page works as a static export (no server) and on a live server alike;
 // applying filters pushes new searchParams (next router handles basePath).
+// Layout follows JW: a thin top bar with a collapsible "Tinh chỉnh" panel,
+// results in a lookbook grid.
 export function SearchExplorer({
   products,
   categories,
@@ -30,10 +33,7 @@ export function SearchExplorer({
     return parseFilters(obj);
   }, [searchParams]);
 
-  const results = useMemo(
-    () => filterProducts(products, current),
-    [products, current],
-  );
+  const results = useMemo(() => filterProducts(products, current), [products, current]);
 
   // Local form state, seeded from the URL.
   const [q, setQ] = useState(current.q ?? "");
@@ -42,6 +42,7 @@ export function SearchExplorer({
   const [minPrice, setMinPrice] = useState(current.minPrice?.toString() ?? "");
   const [maxPrice, setMaxPrice] = useState(current.maxPrice?.toString() ?? "");
   const [sort, setSort] = useState(current.sort ?? "");
+  const [refineOpen, setRefineOpen] = useState(true);
 
   function apply(e: React.FormEvent) {
     e.preventDefault();
@@ -66,30 +67,45 @@ export function SearchExplorer({
     router.push("/tim-kiem");
   }
 
+  const field =
+    "w-full border border-line bg-paper px-3 py-2.5 text-sm text-ink outline-none transition-colors focus:border-ink";
+
   return (
-    <div className="mt-10 grid gap-10 lg:grid-cols-[260px_1fr]">
-      <aside className="lg:sticky lg:top-24 lg:self-start">
-        <form onSubmit={apply} className="space-y-6">
-          <div>
-            <label htmlFor="q" className="mb-2 block text-xs font-semibold uppercase tracking-wider text-stone">
-              Từ khóa
-            </label>
+    <form onSubmit={apply} className="mt-10">
+      {/* Top bar: count + refine toggle */}
+      <div className="flex items-center justify-between border-y border-line py-3">
+        <p className="text-[0.6875rem] uppercase tracking-[0.14em] text-mute">
+          {results.length} kết quả{current.q ? ` cho “${current.q}”` : ""}
+        </p>
+        <button
+          type="button"
+          onClick={() => setRefineOpen((v) => !v)}
+          className="eyebrow inline-flex items-center gap-2 text-ink transition-opacity hover:opacity-60"
+          aria-expanded={refineOpen}
+        >
+          Tinh chỉnh
+          <span aria-hidden className={clsx("transition-transform", refineOpen && "rotate-45")}>
+            +
+          </span>
+        </button>
+      </div>
+
+      {/* Refine panel */}
+      {refineOpen ? (
+        <div className="grid gap-5 border-b border-line py-6 sm:grid-cols-2 lg:grid-cols-4">
+          <Field label="Từ khóa">
             <input
               id="q"
               type="search"
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Đèn mây, bình gốm…"
-              className="w-full rounded-sm border border-line bg-bone px-3 py-2.5 text-sm text-ink outline-none focus:border-terracotta"
+              className={field}
             />
-          </div>
+          </Field>
 
           <Field label="Danh mục">
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full rounded-sm border border-line bg-bone px-3 py-2.5 text-sm text-ink outline-none focus:border-terracotta"
-            >
+            <select value={category} onChange={(e) => setCategory(e.target.value)} className={field}>
               <option value="">Tất cả danh mục</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -100,11 +116,7 @@ export function SearchExplorer({
           </Field>
 
           <Field label="Phong cách">
-            <select
-              value={style}
-              onChange={(e) => setStyle(e.target.value)}
-              className="w-full rounded-sm border border-line bg-bone px-3 py-2.5 text-sm text-ink outline-none focus:border-terracotta"
-            >
+            <select value={style} onChange={(e) => setStyle(e.target.value)} className={field}>
               <option value="">Mọi phong cách</option>
               {styles.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -114,38 +126,8 @@ export function SearchExplorer({
             </select>
           </Field>
 
-          <Field label="Khoảng giá (₫)">
-            <div className="flex items-center gap-2">
-              <input
-                type="number"
-                inputMode="numeric"
-                min={0}
-                step={50000}
-                value={minPrice}
-                onChange={(e) => setMinPrice(e.target.value)}
-                placeholder="Từ"
-                className="w-full rounded-sm border border-line bg-bone px-3 py-2.5 text-sm outline-none focus:border-terracotta"
-              />
-              <span className="text-stone">—</span>
-              <input
-                type="number"
-                inputMode="numeric"
-                min={0}
-                step={50000}
-                value={maxPrice}
-                onChange={(e) => setMaxPrice(e.target.value)}
-                placeholder="Đến"
-                className="w-full rounded-sm border border-line bg-bone px-3 py-2.5 text-sm outline-none focus:border-terracotta"
-              />
-            </div>
-          </Field>
-
           <Field label="Sắp xếp">
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value)}
-              className="w-full rounded-sm border border-line bg-bone px-3 py-2.5 text-sm text-ink outline-none focus:border-terracotta"
-            >
+            <select value={sort} onChange={(e) => setSort(e.target.value)} className={field}>
               <option value="">Mới nhất</option>
               <option value="noi-bat">Nổi bật</option>
               <option value="gia-tang">Giá: thấp đến cao</option>
@@ -153,49 +135,69 @@ export function SearchExplorer({
             </select>
           </Field>
 
-          <div className="flex gap-3 pt-2">
+          <Field label="Giá tối thiểu (₫)">
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              step={50000}
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+              placeholder="Từ"
+              className={field}
+            />
+          </Field>
+
+          <Field label="Giá tối đa (₫)">
+            <input
+              type="number"
+              inputMode="numeric"
+              min={0}
+              step={50000}
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+              placeholder="Đến"
+              className={field}
+            />
+          </Field>
+
+          <div className="flex items-end gap-3 sm:col-span-2">
             <button
               type="submit"
-              className="flex-1 rounded-full bg-terracotta px-5 py-2.5 text-sm font-medium text-bone transition-colors hover:bg-terracotta-dark"
+              className="bg-ink px-6 py-2.5 text-[0.6875rem] font-medium uppercase tracking-[0.15em] text-paper transition-colors hover:bg-ink/85"
             >
               Lọc
             </button>
             <button
               type="button"
               onClick={reset}
-              className="rounded-full border border-line px-5 py-2.5 text-sm text-charcoal hover:border-terracotta hover:text-terracotta"
+              className="border border-line px-6 py-2.5 text-[0.6875rem] font-medium uppercase tracking-[0.15em] text-ink transition-colors hover:border-ink"
             >
               Xóa lọc
             </button>
           </div>
-        </form>
-      </aside>
+        </div>
+      ) : null}
 
-      <div>
-        <p className="mb-6 text-sm text-stone">
-          {results.length} kết quả{current.q ? ` cho “${current.q}”` : ""}
-        </p>
+      {/* Results */}
+      <div className="mt-10">
         {results.length > 0 ? (
-          <div className="grid grid-cols-2 gap-x-5 gap-y-10 xl:grid-cols-3">
-            {results.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
+          <ProductGrid products={results} />
         ) : (
-          <div className="rounded-sm border border-line bg-cream/50 py-20 text-center">
-            <p className="font-display text-2xl text-ink">Không tìm thấy sản phẩm</p>
-            <p className="mt-2 text-stone">Thử nới rộng bộ lọc hoặc đổi từ khóa.</p>
+          <div className="border border-line py-24 text-center">
+            <p className="font-display text-xl font-medium text-ink">Không tìm thấy sản phẩm</p>
+            <p className="mt-2 text-sm text-mute">Thử nới rộng bộ lọc hoặc đổi từ khóa.</p>
           </div>
         )}
       </div>
-    </div>
+    </form>
   );
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-stone">{label}</p>
+      <p className="mb-2 text-[0.6875rem] uppercase tracking-[0.14em] text-mute">{label}</p>
       {children}
     </div>
   );

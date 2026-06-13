@@ -1,5 +1,6 @@
 import { clsx } from "@/lib/cn";
 
+// Hairline rectangular chip — no radius, mono.
 export function Badge({
   children,
   className,
@@ -10,7 +11,7 @@ export function Badge({
   return (
     <span
       className={clsx(
-        "inline-flex items-center gap-1 rounded-full border border-line bg-bone/80 px-3 py-1 text-xs font-medium tracking-wide text-charcoal",
+        "inline-flex items-center gap-1 border border-line px-3 py-1 text-[0.6875rem] uppercase tracking-[0.12em] text-ink",
         className,
       )}
     >
@@ -19,19 +20,7 @@ export function Badge({
   );
 }
 
-const RETAILER_TONE: Record<string, string> = {
-  Shopee: "text-terracotta",
-  Lazada: "text-sage",
-  "TikTok Shop": "text-ink",
-};
-
 export function RetailerBadge({ retailer }: { retailer: string }) {
   if (!retailer) return null;
-  return (
-    <Badge>
-      <span className={clsx("font-semibold", RETAILER_TONE[retailer] ?? "text-charcoal")}>
-        {retailer}
-      </span>
-    </Badge>
-  );
+  return <Badge>{retailer}</Badge>;
 }
