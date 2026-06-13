@@ -4,6 +4,8 @@ import type { Collection, SiteSettings } from "@/types";
 import { driveImageUrl } from "@/lib/image";
 import { Container } from "@/components/ui/Container";
 
+// Full-bleed campaign hero. Image carries the page; type is minimal and sits
+// bottom-left in white over a soft gradient. The fixed header overlays the top.
 export function Hero({
   settings,
   collection,
@@ -11,58 +13,39 @@ export function Hero({
   settings: SiteSettings;
   collection?: Collection;
 }) {
-  return (
-    <section className="relative overflow-hidden bg-cream">
-      <Container width="wide" className="py-14 sm:py-20">
-        <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
-          <div>
-            {settings.heroEyebrow ? <p className="eyebrow mb-5">{settings.heroEyebrow}</p> : null}
-            <h1 className="font-display font-semibold leading-[1.04] text-ink text-[clamp(2.5rem,5.5vw,4.75rem)]">
-              {settings.heroHeadline}
-            </h1>
-            <p className="mt-6 max-w-md text-lg leading-relaxed text-charcoal/85">
-              {settings.heroSubhead}
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              {collection ? (
-                <Link
-                  href={`/bo-suu-tap/${collection.id}`}
-                  className="inline-flex items-center gap-2 rounded-full bg-ink px-7 py-3.5 text-base font-medium text-bone transition-colors hover:bg-charcoal"
-                >
-                  Khám phá tuyển tập
-                  <span aria-hidden>→</span>
-                </Link>
-              ) : null}
-              <Link
-                href="/tim-kiem"
-                className="inline-flex items-center gap-2 rounded-full border border-ink/20 px-7 py-3.5 text-base font-medium text-ink transition-colors hover:border-terracotta hover:text-terracotta"
-              >
-                Xem tất cả sản phẩm
-              </Link>
-            </div>
-          </div>
+  const href = collection ? `/bo-suu-tap/${collection.id}` : "/tim-kiem";
+  const imageId = collection?.heroImageId;
 
-          {collection ? (
-            <Link href={`/bo-suu-tap/${collection.id}`} className="group relative block">
-              <div className="relative aspect-[5/4] overflow-hidden rounded-sm">
-                <Image
-                  src={driveImageUrl(collection.heroImageId)}
-                  alt={collection.title}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 55vw"
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/55 via-ink/0 to-transparent" />
-                <div className="absolute bottom-0 left-0 p-6 sm:p-8">
-                  <p className="text-xs uppercase tracking-[0.2em] text-bone/80">Bộ sưu tập</p>
-                  <p className="mt-1 font-display text-2xl font-semibold text-bone sm:text-3xl">
-                    {collection.title}
-                  </p>
-                </div>
-              </div>
-            </Link>
+  return (
+    <section className="relative h-[100svh] min-h-[560px] w-full overflow-hidden bg-ink text-paper">
+      <Image
+        src={driveImageUrl(imageId)}
+        alt={collection?.title ?? settings.heroHeadline ?? "Tổ Ấm"}
+        fill
+        sizes="100vw"
+        priority
+        className="object-cover"
+      />
+      {/* Legibility gradient — heavier at the bottom where the type lives. */}
+      <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-ink/25" />
+
+      <Container width="wide" className="absolute inset-x-0 bottom-0">
+        <div className="max-w-3xl pb-14 sm:pb-20">
+          {settings.heroEyebrow ? (
+            <p className="eyebrow mb-5 text-paper">{settings.heroEyebrow}</p>
           ) : null}
+          <h1 className="font-display text-[clamp(2rem,5vw,4rem)] font-medium leading-[1.05] tracking-tight text-paper">
+            {settings.heroHeadline}
+          </h1>
+          <Link
+            href={href}
+            className="group mt-8 inline-flex items-center gap-3 border-b border-paper/60 pb-1 text-xs font-medium uppercase tracking-[0.18em] text-paper transition-colors hover:border-paper"
+          >
+            {collection ? "Khám phá tuyển tập" : "Xem tất cả sản phẩm"}
+            <span aria-hidden className="transition-transform group-hover:translate-x-1">
+              →
+            </span>
+          </Link>
         </div>
       </Container>
     </section>
