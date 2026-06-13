@@ -17,12 +17,12 @@ import { dirname, join } from "node:path";
 const BASE = process.env.REF_BASE ?? "https://jwanderson.com";
 
 // Edit this list with the pages you want as reference.
+// URLs discovered by browsing jwanderson.com/en-vn (June 2026).
 const PAGES = [
   { name: "home", path: "/en-vn" },
-  // Add real URLs after browsing the site, e.g.:
-  // { name: "shop", path: "/en-vn/shop/woman" },
-  // { name: "product", path: "/en-vn/products/..." },
-  // { name: "about", path: "/en-vn/about" },
+  { name: "listing", path: "/en-vn/collections/womens-new-in" },
+  { name: "home-decor", path: "/en-vn/collections/all-home" },
+  { name: "product", path: "/en-vn/products/loafer-bag-in-mid-blue-suede" },
 ];
 
 const VIEWPORTS = [
@@ -94,7 +94,10 @@ async function main() {
       await page.setViewportSize({ width: vp.width, height: vp.height });
       try {
         console.log(`→ ${name} (${vp.label}): ${url}`);
-        await page.goto(url, { waitUntil: "networkidle", timeout: 60000 });
+        // networkidle never settles on this site (analytics/long-poll), so wait
+        // for DOM + a fixed settle window instead.
+        await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+        await page.waitForTimeout(3500);
         await dismissCookies(page);
         await autoScroll(page);
         const file = join(OUT, `${name}.${vp.label}.png`);

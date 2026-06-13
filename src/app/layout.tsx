@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Be_Vietnam_Pro } from "next/font/google";
+import { Space_Grotesk, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
 import { getSettings } from "@/lib/data/settings";
 import { getPublishedCategories } from "@/lib/data/categories";
@@ -7,10 +7,13 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { env } from "@/lib/env";
 
-const playfair = Playfair_Display({
+// Single grotesque voice. Space Grotesk is a variable font (no weight needed)
+// and — per Next's font metadata — ships a `vietnamese` subset, so it renders
+// diacritics directly; Be Vietnam Pro stays in the stack as a per-glyph safety net.
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin", "vietnamese"],
   display: "swap",
-  variable: "--font-playfair",
+  variable: "--font-space-grotesk",
 });
 
 const beVietnam = Be_Vietnam_Pro({
@@ -43,8 +46,8 @@ export default async function RootLayout({
   ]);
 
   return (
-    <html lang="vi" className={`${playfair.variable} ${beVietnam.variable}`}>
-      <body className="min-h-screen flex flex-col">
+    <html lang="vi" className={`${spaceGrotesk.variable} ${beVietnam.variable}`}>
+      <body className="min-h-screen flex flex-col bg-paper">
         <Header settings={settings} categories={categories} />
         <main className="flex-1">{children}</main>
         <Footer settings={settings} categories={categories} />

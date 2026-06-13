@@ -1,27 +1,43 @@
 @import "tailwindcss";
 
-/* ── Design tokens: warm, editorial "home decor" palette ───────────────── */
+/* ── Design tokens: mono, editorial — JW Anderson direction ─────────────────
+   The whole palette is monochrome: images carry all the colour, the chrome is
+   black/white/grey only. Contrast comes from image size, not type size. */
 @theme {
-  --color-bone: #f7f3ec;
-  --color-cream: #efe7da;
-  --color-ink: #211d18;
-  --color-charcoal: #3b352e;
-  --color-stone: #8a8174;
-  --color-terracotta: #b4533a;
-  --color-terracotta-dark: #8f3e2b;
-  --color-sage: #6f7a63;
-  --color-line: #e0d6c6;
+  --color-paper: #ffffff; /* primary background */
+  --color-bone: #f4f3f1; /* secondary, very light off-white */
+  --color-ink: #111111; /* text, hairlines, the single "accent" */
+  --color-mute: #6b6b6b; /* secondary text */
+  --color-line: #e6e4e1; /* 1px hairline */
+  --color-accent: #111111; /* JW barely uses an accent → equals ink */
 
-  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
-  --font-body: var(--font-be-vietnam), ui-sans-serif, system-ui, sans-serif;
+  /* Legacy warm-palette names remapped to mono. Any utility class that hasn't
+     been migrated yet (e.g. text-terracotta) therefore still renders on-palette
+     instead of resolving to an undefined colour. */
+  --color-cream: #f4f3f1;
+  --color-charcoal: #111111;
+  --color-stone: #6b6b6b;
+  --color-terracotta: #111111;
+  --color-terracotta-dark: #000000;
+  --color-sage: #6b6b6b;
 
-  --text-display: clamp(2.75rem, 6vw, 5.5rem);
-  --text-feature: clamp(2rem, 4vw, 3.5rem);
+  /* One grotesque family across the whole site (JW never mixes in a serif).
+     Space Grotesk carries the display voice; Be Vietnam Pro is the per-glyph
+     fallback that guarantees Vietnamese diacritics never break. */
+  --font-display: var(--font-space-grotesk), var(--font-be-vietnam),
+    ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-be-vietnam), var(--font-space-grotesk),
+    ui-sans-serif, system-ui, sans-serif;
+
+  /* Headings stay restrained — close to body size, no dramatic display scale. */
+  --text-display: clamp(2rem, 4.5vw, 3.75rem);
+  --text-feature: clamp(1.6rem, 3vw, 2.5rem);
 }
 
 :root {
-  --background: var(--color-bone);
+  --background: var(--color-paper);
   --foreground: var(--color-ink);
+  --header-h: 104px; /* announcement strip + nav row, used to offset content */
 }
 
 @layer base {
@@ -38,43 +54,33 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    font-weight: 600;
+    font-weight: 500;
     letter-spacing: -0.01em;
   }
 
   ::selection {
-    background: var(--color-terracotta);
-    color: var(--color-bone);
+    background: var(--color-ink);
+    color: var(--color-paper);
   }
 }
 
 @layer components {
-  /* Small-caps editorial label */
+  /* Uppercase, widely tracked micro-label — nav, eyebrows, meta, button text.
+     Colour is inherited so the same label reads correctly on light and dark
+     backgrounds; callers set text-* when they want a specific tone. */
   .eyebrow {
-    font-family: var(--font-body);
-    text-transform: uppercase;
-    letter-spacing: 0.22em;
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--color-terracotta);
-  }
-
-  /* Drop cap for editorial body intros */
-  .dropcap::first-letter {
     font-family: var(--font-display);
-    float: left;
-    font-size: 3.4em;
-    line-height: 0.72;
-    padding: 0.08em 0.1em 0 0;
-    color: var(--color-terracotta);
-    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 0.6875rem; /* 11px */
+    font-weight: 500;
   }
 
-  /* Rich text rendered from owner Markdown */
+  /* Rich text rendered from owner Markdown — mono, generous leading. */
   .prose-editorial {
-    font-size: 1.075rem;
-    line-height: 1.85;
-    color: var(--color-charcoal);
+    font-size: 1rem;
+    line-height: 1.8;
+    color: var(--color-mute);
   }
   .prose-editorial p {
     margin-bottom: 1.25rem;
@@ -85,6 +91,9 @@
   }
   .prose-editorial h2,
   .prose-editorial h3 {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+    font-weight: 500;
     margin: 2rem 0 0.75rem;
   }
   .prose-editorial ul {
@@ -93,17 +102,36 @@
     margin-bottom: 1.25rem;
   }
   .prose-editorial a {
-    color: var(--color-terracotta);
+    color: var(--color-ink);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
 }
 
-/* Hide horizontal scrollbar on editorial rails */
+/* Hide horizontal scrollbar on editorial rails / mobile category strips. */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Thin announcement marquee. The track holds the message twice and scrolls one
+   half-width, so the loop is seamless. */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
 }
