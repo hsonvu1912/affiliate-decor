@@ -1,0 +1,7 @@
+[
+  { "id": "bac-au", "name": "Bắc Âu", "order": 1 },
+  { "id": "indochine", "name": "Indochine", "order": 2 },
+  { "id": "toi-gian", "name": "Tối giản", "order": 3 },
+  { "id": "vintage", "name": "Vintage", "order": 4 },
+  { "id": "wabi-sabi", "name": "Wabi-sabi", "order": 5 }
+]

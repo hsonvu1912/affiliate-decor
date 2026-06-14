@@ -1,0 +1,42 @@
+[
+  {
+    "id": "den-trang-tri",
+    "name": "Đèn trang trí",
+    "description": "Ánh sáng là linh hồn của không gian. Từ đèn mây tre đan đến đèn gốm tối giản, mỗi nguồn sáng kể một câu chuyện riêng cho căn phòng của bạn.",
+    "heroImageId": "https://picsum.photos/seed/den-decor/1600/900",
+    "order": 1,
+    "status": "published"
+  },
+  {
+    "id": "binh-gom",
+    "name": "Bình gốm & lọ hoa",
+    "description": "Những đường cong thủ công, men rạn cổ điển và sắc đất nung ấm áp — bình gốm là điểm nhấn editorial cho mọi mặt bàn.",
+    "heroImageId": "https://picsum.photos/seed/gom-decor/1600/900",
+    "order": 2,
+    "status": "published"
+  },
+  {
+    "id": "tranh-treo",
+    "name": "Tranh & khung treo tường",
+    "description": "Một bức tường trống là trang giấy chờ được viết. Tuyển tập tranh in và khung gỗ giúp bạn kể câu chuyện thẩm mỹ của mình.",
+    "heroImageId": "https://picsum.photos/seed/tranh-decor/1600/900",
+    "order": 3,
+    "status": "published"
+  },
+  {
+    "id": "do-may-tre",
+    "name": "Đồ mây tre đan",
+    "description": "Chất liệu tự nhiên, hơi thở thủ công Việt. Giỏ mây, đôn tre và rổ đan mang sự ấm áp mộc mạc vào tổ ấm.",
+    "heroImageId": "https://picsum.photos/seed/maytre-decor/1600/900",
+    "order": 4,
+    "status": "published"
+  },
+  {
+    "id": "nen-thom",
+    "name": "Nến thơm & khuếch tán",
+    "description": "Mùi hương là ký ức vô hình của ngôi nhà. Nến đậu nành và tinh dầu khuếch tán cho những buổi tối chậm rãi.",
+    "heroImageId": "https://picsum.photos/seed/nen-decor/1600/900",
+    "order": 5,
+    "status": "published"
+  }
+]
