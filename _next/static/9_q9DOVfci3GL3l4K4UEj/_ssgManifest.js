@@ -1,0 +1,1 @@
+self.__SSG_MANIFEST=new Set(["\u002Fbo-suu-tap\u002F[collection]","\u002Fdanh-muc\u002F[category]","\u002Fsan-pham\u002F[slug]"]);self.__SSG_MANIFEST_CB&&self.__SSG_MANIFEST_CB()

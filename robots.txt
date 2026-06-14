@@ -1,0 +1,6 @@
+User-Agent: *
+Allow: /
+Disallow: /go/
+Disallow: /api/
+
+Sitemap: https://hsonvu1912.github.io/affiliate-decor/sitemap.xml
