@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import type { Category, SiteSettings } from "@/types";
 import { Container } from "@/components/ui/Container";
 import { clsx } from "@/lib/cn";
 
-// Editorial top chrome: thin announcement marquee + a transparent-over-hero nav
-// that turns solid on scroll. Desktop gets a hover mega-menu; mobile a drawer.
-// The whole thing is fixed; a spacer reserves its height on non-home routes so
-// the fixed bar never covers content (home lets the full-bleed hero sit under it).
+// Editorial top chrome: thin announcement marquee + a solid white nav bar (the
+// JW home is a white image grid, so the header reads dark-on-white everywhere).
+// Desktop gets a hover mega-menu; mobile a drawer. The bar is fixed and a
+// spacer reserves its height so it never covers content.
 export function Header({
   settings,
   categories,
@@ -22,20 +21,8 @@ export function Header({
   const announcement =
     settings.announcement ?? "Tuyển chọn thủ công · Giao khắp Việt Nam · Đồ decor có gu";
 
-  const pathname = usePathname();
-  const isHome = pathname === "/";
-
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false); // mobile drawer
   const [megaOpen, setMegaOpen] = useState(false); // desktop mega-menu
-
-  // Solidify the bar once the user scrolls away from the very top.
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   // Lock body scroll while the drawer is open. (The drawer itself closes on
   // navigation because every link inside it calls onClose.)
@@ -46,27 +33,14 @@ export function Header({
     };
   }, [menuOpen]);
 
-  // Transparent (light text) only while at the top of the home hero.
-  const solid = !isHome || scrolled;
-
   return (
     <>
       <header
         onMouseLeave={() => setMegaOpen(false)}
-        className={clsx(
-          "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
-          solid
-            ? "bg-paper/90 text-ink backdrop-blur-md"
-            : "bg-transparent text-paper",
-        )}
+        className="fixed inset-x-0 top-0 z-50 bg-paper/90 text-ink backdrop-blur-md"
       >
         {/* Announcement marquee */}
-        <div
-          className={clsx(
-            "h-10 overflow-hidden border-b text-[0.6875rem] uppercase tracking-[0.18em]",
-            solid ? "border-line" : "border-paper/20",
-          )}
-        >
+        <div className="h-10 overflow-hidden border-b border-line text-[0.6875rem] uppercase tracking-[0.18em]">
           <div className="flex h-full items-center whitespace-nowrap">
             <div className="animate-marquee flex shrink-0">
               <AnnouncementRun text={announcement} />
@@ -137,12 +111,11 @@ export function Header({
         <div
           onMouseLeave={() => setMegaOpen(false)}
           className={clsx(
-            "hidden border-t md:block",
-            solid ? "border-line" : "border-paper/20",
+            "hidden border-t border-line md:block",
             megaOpen ? "opacity-100" : "pointer-events-none h-0 overflow-hidden opacity-0",
           )}
         >
-          <div className={clsx(solid ? "bg-paper text-ink" : "bg-ink/95 text-paper")}>
+          <div className="bg-paper text-ink">
             <Container width="wide" className="grid grid-cols-4 gap-10 py-10">
               <div className="col-span-2">
                 <p className="eyebrow mb-5 text-current opacity-50">Danh mục</p>
@@ -194,8 +167,8 @@ export function Header({
         </div>
       </header>
 
-      {/* Spacer keeps content clear of the fixed bar on non-home routes. */}
-      {!isHome ? <div aria-hidden style={{ height: "var(--header-h)" }} /> : null}
+      {/* Spacer reserves the fixed bar's height on every route. */}
+      <div aria-hidden style={{ height: "var(--header-h)" }} />
 
       {/* Mobile drawer */}
       <MobileDrawer
